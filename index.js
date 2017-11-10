@@ -18,7 +18,7 @@ var RedisLockingWorker = module.exports = function RedisLockingWorker(settings) 
 	}
 
 	if (settings.client) {
-		this.client = client;
+		this.client = settings.client;
 	} else {
 		settings.port = settings.port || 6379;
 		settings.host = settings.host || "localhost";
@@ -75,7 +75,7 @@ function reacquireLock(attemptCount) {
 
 	var emit = emitStatus.bind(this, StatusLevels.Normal);
 	var emitVerbose = emitStatus.bind(this, StatusLevels.Verbose);
-	
+
 	emitVerbose("Trying to reacquire lock");
 
 	this.client.watch(this.lockKey);
@@ -110,12 +110,12 @@ function reacquireLock(attemptCount) {
 					// The value changed out from under us, we didn't get the lock!
 					that.emit("locked");
 					that.client.get(that.lockKey, function(error, currentAttemptCount) {
-						setTimeout(checkLock.bind(that), that.lockTimeout, currentAttemptCount);	
+						setTimeout(checkLock.bind(that), that.lockTimeout, currentAttemptCount);
 					});
 				} else {
 					that.emit("acquired", attempts === that.maxAttempts);
 				}
-			});	
+			});
 	});
 }
 
