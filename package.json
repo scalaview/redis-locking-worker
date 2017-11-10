@@ -7,7 +7,7 @@
 		"example": "examples"
 	},
 	"dependencies": {
-		"redis": "~0.8.2"
+		"redis": "^2.8.0"
 	},
 	"devDependencies": {},
 	"scripts": {
